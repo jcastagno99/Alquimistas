@@ -69,6 +69,18 @@ object alquimista {
   method todosLosItemsDeCombateSonEfectivos(){
   	return itemsDeCombate.all({unItem => unItem.esEfectivo()})
   }
+  
+//--- Metodos para el testing
+
+  method agregarItemDeCombate(unItem){
+  	itemsDeCombate.add(unItem)
+  	
+  }  
+  
+    method agregarItemDeRecoleccion(unItem){
+  	itemsDeRecoleccion.add(unItem)
+  	
+  }  
 }
 
 //--------------------------------------------------------------------------------------------------------------
@@ -88,7 +100,18 @@ object bomba {
   method calidad() {
   	return materiales.min({unMaterial => unMaterial.calidad()}).calidad()
   }
+  
+//--- Metodos para el testing
+
+  method cambiarDanio(unDanio){
+	danio = unDanio
+}  
+  
+  
+  
+  
 }
+
 
 //--------------------------------------------------------------------------------------------------------------
 
@@ -114,6 +137,12 @@ object pocion {
   
   method calidad() {
   	return materiales.findOrElse({unMaterial=>unMaterial.esMistico()}, {materiales.head()}).calidad() 
+  }  
+  
+//--- Metodos para el testing
+
+  method cambiarPoderCurativo(poder){
+  	poderCurativo = poder
   }  
   
 }
