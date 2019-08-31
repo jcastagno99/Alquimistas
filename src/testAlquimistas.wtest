@@ -30,4 +30,54 @@ describe "testDeAlquimistas"{
 		assert.that(alquimista.esBuenExplorador().negate())
 	}
 	
+	test "Un alquimista no tiene capacidad ofensiva (es 0)"{
+		assert.that(alquimista.capacidadOfensiva()==0)
+	}
+	
+	test "Capacidad ofensiva de la bomba"{
+		bomba.cambiarDanio(200)
+		assert.that(bomba.capacidadOfensiva()==100)
+	}
+	
+	test "Capacidad ofensiva de la pocion sin materiales misticos"{
+		pocion.cambiarPoderCurativo(100)
+		assert.that(pocion.capacidadOfensiva()==100)		
+	}
+	
+	test "Capacidad ofensiva de la pocion con materiales misticos (3)"{
+		pocion.cambiarPoderCurativo(100)
+		pocion.agregarMaterial(unMaterialMistico)
+		pocion.agregarMaterial(unMaterialMistico)
+		pocion.agregarMaterial(unMaterialMistico)
+		pocion.agregarMaterial(unMaterial)
+		assert.that(pocion.capacidadOfensiva()==130)
+		
+	}
+	
+	test "Capacidad ofensiva del debilitador sin materiales misticos"{
+		assert.that(debilitador.capacidadOfensiva()==5)
+	}
+	
+	test "Capacidad ofensiva del debilitador con materiales misticos"{
+		debilitador.agregarMaterial(unMaterialMistico)
+		debilitador.agregarMaterial(unMaterial)
+		debilitador.agregarMaterial(unMaterial)
+		debilitador.agregarMaterial(unMaterial)
+		assert.that(debilitador.capacidadOfensiva()==48)
+	}
+	
+	test "Capacidad ofensiva de un alquimista con items de combate"{
+		 bomba.cambiarDanio(100)
+		 alquimista.agregarItemDeCombate(bomba)              // 50 de la bomba
+		 pocion.cambiarPoderCurativo(100)                  
+		 pocion.agregarMaterial(unMaterialMistico)
+		 pocion.agregarMaterial(unMaterialMistico)
+		 alquimista.agregarItemDeCombate(pocion)            // 120 de la pocion
+		 debilitador.agregarMaterial(unMaterialMistico)
+		 debilitador.agregarMaterial(unMaterial)
+		 debilitador.agregarMaterial(unMaterial)
+		 alquimista.agregarItemDeCombate(debilitador)      // 36 del debilitador
+		 assert.that(alquimista.capacidadOfensiva()==206)
+	}
+	
 }

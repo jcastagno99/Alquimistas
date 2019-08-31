@@ -105,13 +105,9 @@ object bomba {
 
   method cambiarDanio(unDanio){
 	danio = unDanio
-}  
-  
-  
-  
-  
+  }  
+   
 }
-
 
 //--------------------------------------------------------------------------------------------------------------
 
@@ -144,6 +140,11 @@ object pocion {
   method cambiarPoderCurativo(poder){
   	poderCurativo = poder
   }  
+  
+  method agregarMaterial(unMaterial){
+  	materiales.add(unMaterial)
+  }
+  
   
 }
 
@@ -208,6 +209,12 @@ object debilitador {
   	materiales.remove(mejor1)
   }
   
+  
+ //--- Metodos para el testing
+ 
+   method agregarMaterial(unMaterial){
+  	materiales.add(unMaterial)
+  }
   
  }
  
