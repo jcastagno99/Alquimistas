@@ -80,4 +80,102 @@ describe "testDeAlquimistas"{
 		 assert.that(alquimista.capacidadOfensiva()==206)
 	}
 	
+	test "Calidad de la bomba"{
+		bomba.agregarMaterial(unMaterial)
+		bomba.agregarMaterial(unMaterialMistico)
+		assert.that(bomba.calidad()==10)
+	}
+	
+	test "Calidad de la pocion cuando tiene un material mistico"{
+		pocion.agregarMaterial(unMaterialMistico)
+		pocion.agregarMaterial(unMaterial)
+		pocion.agregarMaterial(otroMaterialMistico)
+		assert.that(pocion.calidad()==20)
+		
+	}
+	
+	test "Calidad de la pocion cuando no tiene un material mistico"{
+		pocion.agregarMaterial(unMaterial)
+		pocion.agregarMaterial(otroMaterial)
+		assert.that(pocion.calidad()==10)
+		
+	}
+	
+	test "Calidad del debilitador cuando no tiene materiales"{
+		assert.that(debilitador.calidad()==0)
+	}
+	
+	test "Calidad del debilitador cuando tiene un solo material"{
+		debilitador.agregarMaterial(unMaterial)
+		assert.that(debilitador.calidad()==5)
+		
+	}
+	
+	test "Calidad del debilitador cuando tiene varios materiales"{
+		debilitador.agregarMaterial(unMaterial)               // tiene calidad 10
+		debilitador.agregarMaterial(otroMaterial)             // tiene calidad 5
+		debilitador.agregarMaterial(unMaterialMistico)        // tiene calidad 20
+		debilitador.agregarMaterial(otroMaterialMistico)      // tiene calidad 30
+		assert.that(debilitador.calidad()==25)                // (20+30)/2 = 25
+	}
+	
+	test "Suma de las calidades de los items de combate de un alquimista"{
+		bomba.agregarMaterial(unMaterial)
+		bomba.agregarMaterial(unMaterialMistico)
+		alquimista.agregarItemDeCombate(bomba)               // calidad bomba = 10
+		pocion.agregarMaterial(unMaterialMistico)
+		pocion.agregarMaterial(unMaterial)
+		pocion.agregarMaterial(otroMaterialMistico)
+		alquimista.agregarItemDeCombate(pocion)              // calidad pocion = 20
+		debilitador.agregarMaterial(unMaterial)               
+		debilitador.agregarMaterial(otroMaterial)             
+		debilitador.agregarMaterial(unMaterialMistico)        
+		debilitador.agregarMaterial(otroMaterialMistico)  
+		alquimista.agregarItemDeCombate(debilitador)         // calidad debilitador = 25
+		assert.that(alquimista.calidadItemsCombate()== 55)   // calidad total = 10 + 20 + 25 = 55
+		
+	}
+	
+	test "Calidad de los items de recoleccion de un alquimista"{
+	    bomba.agregarMaterial(otroMaterialMistico)
+	    alquimista.agregarItemDeRecoleccion(bomba)                   // calidad bomba = 30
+	    pocion.agregarMaterial(unMaterial)
+	    pocion.agregarMaterial(unMaterialMistico)
+	    alquimista.agregarItemDeRecoleccion(pocion)                  //  calidad pocion = 20
+	    debilitador.agregarMaterial(unMaterial)
+	    debilitador.agregarMaterial(unMaterial)
+	    alquimista.agregarItemDeRecoleccion(debilitador)             // calidad debilitador = 10
+	    assert.that(alquimista.calidadItemsRecoleccion()==36)        // calidad total de items de recoleccion = 30 + 60/10 = 36
+	}
+	
+	test "Promedio de la calidad de los items de un alquimista cuando no tiene ninguo"{
+		assert.that(alquimista.promedioCalidadItems()==0)
+	}
+	
+	test "Promedio de la calidad de los items de un alquimista cuando solo tiene items de combate"{
+		bomba.agregarMaterial(otroMaterialMistico)
+		alquimista.agregarItemDeCombate(bomba) // 30
+		pocion.agregarMaterial(otroMaterialMistico) // 30
+		alquimista.agregarItemDeCombate(pocion)
+		assert.that(alquimista.promedioCalidadItems()==45)   // calidad promedio = (60+30)/(2+0)
+	}
+	
+	test "Promedio de la calidad de los items de un alquimista cuando solo tiene items de recoleccion"{
+		bomba.agregarMaterial(unMaterial)
+		alquimista.agregarItemDeRecoleccion(bomba)
+		pocion.agregarMaterial(otroMaterialMistico) //0+(30+40/10) / (0+2)
+		alquimista.agregarItemDeRecoleccion(pocion)
+		assert.that(alquimista.promedioCalidadItems()==3)
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	}
 }

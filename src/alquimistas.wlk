@@ -46,20 +46,24 @@ object alquimista {
   }
   
   method promedioCalidadItems() {
-  	return self.calidadItemsCombate() + self.calidadItemsRecoleccion() / self.cantidadTotalItems()
+  	if (self.cantidadTotalItems() != 0) return self.calidadItemsCombate() + self.calidadItemsRecoleccion() / self.cantidadTotalItems()
+  	return 0
   }
   
   method calidadItemsCombate() {
-  	return itemsDeCombate.sum({unItem => unItem.calidad()}) 
+  	if (itemsDeCombate.size() != 0) return itemsDeCombate.sum({unItem => unItem.calidad()}) 
+  	return 0
   }
   
   method calidadItemsRecoleccion() {
-  	return 30 + self.calidadMaterialesRecoleccion() / 10
+  	if (itemsDeRecoleccion.size() != 0) return 30 + self.calidadMaterialesRecoleccion() / 10
+  	return 0
   }
   
   method calidadMaterialesRecoleccion(){
-  	return itemsDeRecoleccion.sum({unItem => unItem.calidad()})
-  }
+    if (itemsDeRecoleccion.size() != 0)	return itemsDeRecoleccion.sum({unItem => unItem.calidad()})
+    return 0
+  } 
   
   method cantidadTotalItems(){
   	return itemsDeCombate.size() + itemsDeRecoleccion.size()
@@ -105,6 +109,10 @@ object bomba {
 
   method cambiarDanio(unDanio){
 	danio = unDanio
+  }
+  
+  method agregarMaterial(unMaterial){
+  	materiales.add(unMaterial)
   }  
    
 }
@@ -155,6 +163,7 @@ object debilitador {
   var potencia = 0
   var mejor1 = 0
   var mejor2 = 0
+  var listaDeCalidades
   
   method esEfectivo() {
     return potencia > 0 and self.fueCreadoPorAlgunMaterialMistico().negate()
@@ -182,14 +191,9 @@ object debilitador {
   
   
   method calidad(){
-  	return self.calidadMejoresMateriales().sum() / 2 
-  }
-  
-  method calidadMejoresMateriales(){
-  	return self.mejoresMateriales().map({unMaterial => unMaterial.calidad()})
-  	
-  }
-  
+  	return self.mejoresMateriales().sum() / 2 
+   }
+ 
   method mejoresMateriales(){
   	self.obtenerMejor1()
   	self.obtenerMejor2()
@@ -197,18 +201,25 @@ object debilitador {
   }
   
   method obtenerMejor1(){
-  	mejor1 = materiales.max({unMaterial => unMaterial.calidad()})
+  	listaDeCalidades = self.calidadMateriales()
+  	if (listaDeCalidades.size() != 0) mejor1 = listaDeCalidades.max()
+  	else mejor1 = 0
   }
   
   method obtenerMejor2(){
-  	mejor2 = materiales.borrarMejor1().max({unMaterial => unMaterial.calidad()})
+  	self.borrarMejor1()
+    if (listaDeCalidades.size() != 0) mejor2 = listaDeCalidades.max()
+    else mejor2 = 0
   }
 
   method  borrarMejor1(){
   	self.obtenerMejor1()
-  	materiales.remove(mejor1)
+  	listaDeCalidades.remove(mejor1)
   }
   
+  method calidadMateriales(){
+  	return materiales.map({unMaterial => unMaterial.calidad()})
+  }
   
  //--- Metodos para el testing
  
@@ -232,7 +243,20 @@ object unMaterialMistico {
 		return calidad
 	}
 }
+
  	
+object otroMaterialMistico {
+	var calidad = 30
+	
+	method esMistico(){
+		return true
+	}
+	
+	method calidad(){
+		return calidad
+	}
+}
+
 
 object unMaterial {
 	var calidad = 10
@@ -247,6 +271,17 @@ object unMaterial {
 } 	
  	
  	
+object otroMaterial{
+	var calidad = 5
+	
+	method esMistico(){
+		return false
+	}
+	
+	method calidad(){
+		return calidad
+	}
+} 	
  	
  	
  	
