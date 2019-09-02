@@ -3,6 +3,7 @@ object alquimista {
   var itemsDeCombate = []
   var itemsDeRecoleccion = []
   
+  
   //---Punto 1 
   
   method tieneCriterio() {
@@ -46,7 +47,7 @@ object alquimista {
   }
   
   method promedioCalidadItems() {
-  	if (self.cantidadTotalItems() != 0) return self.calidadItemsCombate() + self.calidadItemsRecoleccion() / self.cantidadTotalItems()
+  	if (self.cantidadTotalItems() != 0) return (self.calidadItemsCombate() + self.calidadItemsRecoleccion()) / self.cantidadTotalItems()
   	return 0
   }
   
@@ -56,13 +57,12 @@ object alquimista {
   }
   
   method calidadItemsRecoleccion() {
-  	if (itemsDeRecoleccion.size() != 0) return 30 + self.calidadMaterialesRecoleccion() / 10
-  	return 0
+  	if (itemsDeRecoleccion.size() != 0) return (30 + self.calidadMaterialesRecoleccion() / 10)
+  	return 30
   }
   
   method calidadMaterialesRecoleccion(){
-    if (itemsDeRecoleccion.size() != 0)	return itemsDeRecoleccion.sum({unItem => unItem.calidad()})
-    return 0
+    return itemsDeRecoleccion.sum({unItem => unItem.calidad()})
   } 
   
   method cantidadTotalItems(){
@@ -227,6 +227,10 @@ object debilitador {
   	materiales.add(unMaterial)
   }
   
+  method cambiarPotencia(unaPotencia){
+  	potencia = unaPotencia
+  }
+  
  }
  
  //--------------------------------------------------------------------------------------------------------------
@@ -283,7 +287,18 @@ object otroMaterial{
 	}
 } 	
  	
- 	
+
+object elMejorMaterial{
+	var calidad = 3000
+	
+	method esMistico(){
+		return true
+	}
+	
+	method calidad(){
+		return calidad
+	}
+} 	
  	
  	
  	

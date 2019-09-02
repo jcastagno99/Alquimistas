@@ -154,28 +154,88 @@ describe "testDeAlquimistas"{
 	
 	test "Promedio de la calidad de los items de un alquimista cuando solo tiene items de combate"{
 		bomba.agregarMaterial(otroMaterialMistico)
-		alquimista.agregarItemDeCombate(bomba) // 30
-		pocion.agregarMaterial(otroMaterialMistico) // 30
+		alquimista.agregarItemDeCombate(bomba) 
+		pocion.agregarMaterial(otroMaterialMistico) 
 		alquimista.agregarItemDeCombate(pocion)
-		assert.that(alquimista.promedioCalidadItems()==45)   // calidad promedio = (60+30)/(2+0)
+		assert.that(alquimista.promedioCalidadItems()==45)           // calidad promedio = (60+30)/(2+0)
 	}
 	
 	test "Promedio de la calidad de los items de un alquimista cuando solo tiene items de recoleccion"{
 		bomba.agregarMaterial(unMaterial)
+		alquimista.agregarItemDeRecoleccion(bomba) 
+		pocion.agregarMaterial(otroMaterialMistico) 
+		alquimista.agregarItemDeRecoleccion(pocion) 
+		assert.that(alquimista.promedioCalidadItems()==17)           // calidad promedio = (0+(30+(40/10)))/2
+	}
+	
+	
+	test "Promedio de la calidad de los items de un alquimista cuando tiene items de combate y recoleccion"{
+		bomba.agregarMaterial(unMaterial)
+		alquimista.agregarItemDeCombate(bomba)
+		pocion.agregarMaterial(unMaterialMistico)
+		alquimista.agregarItemDeCombate(pocion)
+		debilitador.agregarMaterial(unMaterialMistico)
+		debilitador.agregarMaterial(unMaterialMistico)
+		alquimista.agregarItemDeRecoleccion(debilitador)
+		assert.that(alquimista.promedioCalidadItems()== 20.66667)    // ((10+20) + (30+2)) / 2+1 = 62/3
+	}
+	
+	
+	test "Todos los items de combate del alquimista son efectivos"{
+		bomba.cambiarDanio(500)
+		pocion.cambiarPoderCurativo(100)
+		pocion.agregarMaterial(unMaterialMistico)
+		debilitador.cambiarPotencia(100)
+		debilitador.agregarMaterial(unMaterial)
+		debilitador.agregarMaterial(unMaterial)
+		alquimista.agregarItemDeCombate(bomba)
+		alquimista.agregarItemDeCombate(pocion)
+		alquimista.agregarItemDeCombate(debilitador)
+		assert.that(alquimista.todosLosItemsDeCombateSonEfectivos())
+	}
+	
+	
+	test "Un alquimista no es profesional si no es buen explorador "{
+		bomba.agregarMaterial(otroMaterialMistico)
+		bomba.cambiarDanio(100)
+		pocion.cambiarPoderCurativo(100)
+		pocion.agregarMaterial(unMaterialMistico)
+		debilitador.cambiarPotencia(100)
+		debilitador.agregarMaterial(unMaterial)
+		debilitador.agregarMaterial(unMaterial)
+		alquimista.agregarItemDeCombate(bomba)
+		alquimista.agregarItemDeCombate(pocion)
+		alquimista.agregarItemDeCombate(debilitador)
+		assert.that(alquimista.esProfesional().negate())		
+	}
+	
+	test "Un alquimista no es profesional si la calidad promedio de todos sus items no es mayor a 50"{
+		bomba.cambiarDanio(100)
+		bomba.agregarMaterial(unMaterial)
+		alquimista.agregarItemDeCombate(bomba)
 		alquimista.agregarItemDeRecoleccion(bomba)
-		pocion.agregarMaterial(otroMaterialMistico) //0+(30+40/10) / (0+2)
-		alquimista.agregarItemDeRecoleccion(pocion)
-		assert.that(alquimista.promedioCalidadItems()==3)
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		alquimista.agregarItemDeRecoleccion(bomba)
+		alquimista.agregarItemDeRecoleccion(bomba)
+		assert.that(alquimista.esProfesional().negate())
+	}
+	
+	test "Un alquimista no es profesional si todos sus items de combate no son efectivos"{
+		bomba.agregarMaterial(elMejorMaterial)
+		bomba.cambiarDanio(20)
+		alquimista.agregarItemDeCombate(bomba)
+		alquimista.agregarItemDeRecoleccion(bomba)
+		alquimista.agregarItemDeRecoleccion(bomba)
+		alquimista.agregarItemDeRecoleccion(bomba)
+		assert.that(alquimista.esProfesional().negate())
+	}
+	
+	test "Un alquimista es profesional"{
+		bomba.agregarMaterial(elMejorMaterial)
+		bomba.cambiarDanio(500)
+		alquimista.agregarItemDeCombate(bomba)
+		alquimista.agregarItemDeRecoleccion(bomba)
+		alquimista.agregarItemDeRecoleccion(bomba)
+		alquimista.agregarItemDeRecoleccion(bomba)
+		assert.that(alquimista.esProfesional())
 	}
 }
